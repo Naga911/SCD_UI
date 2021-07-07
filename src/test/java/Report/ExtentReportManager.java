@@ -29,6 +29,8 @@ public class ExtentReportManager {
 
     private static Map<Integer, ExtentTest> extentTestMap = new HashMap<>();
     public static ExtentTest logger;
+    public static ExtentTest parentTest;
+    public static ExtentTest childTest;
     public static ExtentReports extent = new ExtentReports();
 
 
@@ -63,21 +65,21 @@ public class ExtentReportManager {
     public static void testStepHandle(String teststatus, WebDriver driver, ExtentTest test, Throwable throwable) {
         switch (teststatus) {
             case "FAIL":
-                logger.fail(MarkupHelper.createLabel(throwable.getMessage(), ExtentColor.RED));
+                childTest.fail(MarkupHelper.createLabel(throwable.getMessage(), ExtentColor.RED));
                 System.out.println(": i want to know: " + throwable);
                 try {
                     String base64Screenshot = "data:image/png;base64," + ((TakesScreenshot) driver).getScreenshotAs(OutputType.BASE64);
-                    logger.log(Status.FAIL, "Screenshot of failed test Case", logger.addScreenCaptureFromBase64String(base64Screenshot).getModel().getMedia().get(0));
+                    childTest.log(Status.FAIL, "Screenshot of failed test Case", childTest.addScreenCaptureFromBase64String(base64Screenshot).getModel().getMedia().get(0));
                 } catch (Exception e) {
-                    logger.fail("Test failed, cannot attach screenshot");
+                    childTest.fail("Test failed, cannot attach screenshot");
                 }
                 break;
 
             case "PASS":
-                logger.pass(MarkupHelper.createLabel("Test Case is Passed : ", ExtentColor.GREEN));
+                childTest.pass(MarkupHelper.createLabel("Test Case is Passed : ", ExtentColor.GREEN));
                 break;
             case "SKIP":
-                logger.skip(MarkupHelper.createLabel("Test Case is Skipped : ", ExtentColor.YELLOW));
+                childTest.skip(MarkupHelper.createLabel("Test Case is Skipped ", ExtentColor.YELLOW));
                 break;
             default:
                 break;

@@ -24,6 +24,7 @@ public class LoginPage extends ExtentReportManager {
     private WebDriver driver = BaseUtill.GetDriver();
     ITestResult getresult;
 
+
     @BeforeTest
     public void setupLoginSteps() {
         System.out.println("Before-login-test");
@@ -31,7 +32,7 @@ public class LoginPage extends ExtentReportManager {
         baseSteps.setupCucumber();
     }
 
-    @Test(retryAnalyzer = Retry.class)
+    @Test
     public void testpass() throws IOException {
         ExtentTest logInfo = null;
 
@@ -42,31 +43,39 @@ public class LoginPage extends ExtentReportManager {
             driver.manage().window().maximize();
             WebDriverWait webDriverWait = new WebDriverWait(driver, Duration.ofSeconds(10));
             webDriverWait.until(WebDriver -> ((JavascriptExecutor) driver).executeScript("return document.readyState").equals("complete"));
-            logger = extent.createTest("executing pass scenario").assignCategory("Sanity").assignAuthor("Nagaraj");
-            logger.log(Status.PASS,"Test Case passed");
+            parentTest = extent.createTest("executing scenarios").assignCategory("Sanity").assignAuthor("Nagaraj");
+            childTest=parentTest.createNode("Verification of pass test scenario");
+
+
+            childTest.log(Status.PASS,"Test Case passed");
 
         } catch (AssertionError | Exception e) {
-            testStepHandle("PASS", BaseUtill.GetDriver(), logger, e);
+            testStepHandle("PASS", BaseUtill.GetDriver(), childTest, e);
         }
     }
 
-    @Test(retryAnalyzer = Retry.class)
+    @Test
     public void testskip() {
         ExtentTest logInfo = null;
         try {
-            logger = extent.createTest("skip test").assignCategory("Sanity").assignAuthor("Nagaraj");
+
+          //  parentTest = extent.createTest("skip test").assignCategory("Sanity").assignAuthor("Nagaraj");
+            childTest=parentTest.createNode("Verification of skip test scenario");
+
             throw new SkipException("executing skip scenario");
 
         } catch (AssertionError | Exception e) {
-            testStepHandle("SKIP", BaseUtill.GetDriver(), logger, e);
+            testStepHandle("SKIP", BaseUtill.GetDriver(), childTest, e);
         }
     }
 
-    @Test(retryAnalyzer = Retry.class)
+    @Test
     public void testfailed() {
         ExtentTest logInfo = null;
         try {
-            logger = extent.createTest("failed test").assignCategory("Regression").assignAuthor("Nagaraj");
+            parentTest = extent.createTest("scenarios for Failed Case").assignCategory("Regression").assignAuthor("Nagaraj");
+
+            childTest=parentTest.createNode("Verification of failed test scenario");
             BaseUtill baseUtil = new BaseUtill();
             driver = baseUtil.GetDriver();
             driver.get("https://www.amazon.in/");
@@ -76,7 +85,7 @@ public class LoginPage extends ExtentReportManager {
 
         }catch (AssertionError | Exception e) {
 
-            testStepHandle("FAIL", BaseUtill.GetDriver(), logger, e);
+            testStepHandle("FAIL", BaseUtill.GetDriver(), childTest, e);
         }
 
     }
