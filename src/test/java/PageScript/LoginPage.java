@@ -3,6 +3,7 @@ package PageScript;
 import Base.BaseUtill;
 
 import Utilities.Log;
+import Utilities.Retry;
 import com.aventstack.extentreports.Status;
 import org.openqa.selenium.*;
 import org.openqa.selenium.support.ui.WebDriverWait;
@@ -30,7 +31,7 @@ public class LoginPage extends ExtentReportManager {
         baseSteps.setupCucumber();
     }
 
-    @Test
+    @Test(retryAnalyzer = Retry.class)
     public void testpass() throws IOException {
         ExtentTest logInfo = null;
 
@@ -49,7 +50,7 @@ public class LoginPage extends ExtentReportManager {
         }
     }
 
-    @Test
+    @Test(retryAnalyzer = Retry.class)
     public void testskip() {
         ExtentTest logInfo = null;
         try {
@@ -61,7 +62,7 @@ public class LoginPage extends ExtentReportManager {
         }
     }
 
-    @Test
+    @Test(retryAnalyzer = Retry.class)
     public void testfailed() {
         ExtentTest logInfo = null;
         try {
