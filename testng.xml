@@ -8,9 +8,9 @@
     </listeners>
 
     <test name="Chrome" parallel="classes" thread-count="1">
+
         <classes>
             <class name="PageScript.LoginPage"/>
-
         </classes>
     </test>
 </suite>

@@ -15,6 +15,7 @@ import com.aventstack.extentreports.ExtentTest;
 
 import java.io.IOException;
 import java.time.Duration;
+import java.util.Arrays;
 
 import Report.ExtentReportManager;
 
@@ -50,7 +51,8 @@ public class LoginPage extends ExtentReportManager {
             childTest.log(Status.PASS,"Test Case passed");
 
         } catch (AssertionError | Exception e) {
-            testStepHandle("PASS", BaseUtill.GetDriver(), childTest, e);
+            String e1= Arrays.toString(e.getStackTrace());
+            testStepHandle("PASS", BaseUtill.GetDriver(), childTest, e1);
         }
     }
 
@@ -65,7 +67,8 @@ public class LoginPage extends ExtentReportManager {
             throw new SkipException("executing skip scenario");
 
         } catch (AssertionError | Exception e) {
-            testStepHandle("SKIP", BaseUtill.GetDriver(), childTest, e);
+            String e1= Arrays.toString(e.getStackTrace());
+            testStepHandle("SKIP", BaseUtill.GetDriver(), childTest, e1);
         }
     }
 
@@ -84,12 +87,22 @@ public class LoginPage extends ExtentReportManager {
             Assert.assertEquals(currentURL, "NoTitle");
 
         }catch (AssertionError | Exception e) {
-
-            testStepHandle("FAIL", BaseUtill.GetDriver(), childTest, e);
+             String e1= Arrays.toString(e.getStackTrace());
+            testStepHandle("FAIL", BaseUtill.GetDriver(), childTest, e1);
         }
 
     }
-
+    @AfterMethod
+    public void aftermethod(ITestResult result)
+    {
+        String methodname=result.getMethod().getMethodName();
+        if(result.getStatus()==ITestResult.FAILURE)
+        {
+            String exceptionmessage= Arrays.toString(result.getThrowable().getStackTrace());
+            childTest.fail("<details><summary><b><font color=red>Exception occured, click to see details:"
+            +"</font><b></summary>"+exceptionmessage.replaceAll(",","<br")+"</details> \n");
+        }
+    }
 
     /*@AfterMethod
     public void aftermethod(ITestResult iTestResult) throws IOException {

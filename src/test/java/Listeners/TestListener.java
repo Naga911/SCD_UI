@@ -56,36 +56,6 @@ public class TestListener extends ExtentReportManager implements ITestListener {
     @Override
     public void onTestFailure(ITestResult iTestResult) {
 
-       /* String methodname = iTestResult.getMethod().getMethodName();
-
-        if (iTestResult.getStatus() == iTestResult.FAILURE) {
-            String exceptionmessage = Arrays.toString(iTestResult.getThrowable().getStackTrace());
-            
-            logger.fail("Failure" + exceptionmessage.replaceAll(",", "<br>"));
-           *//* String path = takescreenshot(iTestResult.getMethod().getMethodName());
-            System.out.println("Printing path :" + path);*//*
-            try {
-                String base64Screenshot = "data:image/png;base64," + ((TakesScreenshot) driver).getScreenshotAs(OutputType.BASE64);
-                //   logger.fail(MediaEntityBuilder.createScreenCaptureFromPath(base64Screenshot).build());
-                logger.log(Status.FAIL, "Test Failed", logger.addScreenCaptureFromBase64String(base64Screenshot).getModel().getMedia().get(0));
-            } catch (Exception e) {
-                logger.fail("Test failed, cannot attach screenshot");
-            }
-            *//*Object testClass = iTestResult.getInstance();
-            String base64Screenshot = "data:image/png;base64," + ((TakesScreenshot) driver).getScreenshotAs(OutputType.BASE64);
-            logger.log(Status.FAIL, "Test Failed", logger.addScreenCaptureFromBase64String(base64Screenshot).getModel().getMedia().get(0));*//*
-            String logtext = "<br>Test Method" + methodname + "failed</br>";
-            Markup m = MarkupHelper.createLabel(logtext, ExtentColor.RED);
-            logger.log(Status.FAIL, m);
-        } else if (iTestResult.getStatus() == iTestResult.SUCCESS) {
-            String logtexts = "<br>Test Method :" + methodname + " Passed</br>";
-            Markup m = MarkupHelper.createLabel(logtexts, ExtentColor.GREEN);
-            logger.log(Status.PASS, m);
-        } else if (iTestResult.getStatus() == iTestResult.SKIP) {
-            String logtext = "<br>Test Method" + methodname + "Skipped</br>";
-            Markup m = MarkupHelper.createLabel(logtext, ExtentColor.YELLOW);
-            logger.log(Status.SKIP, m);
-        }*/
     }
 
     @Override

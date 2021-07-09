@@ -18,6 +18,7 @@ import java.io.File;
 import java.io.IOException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -62,11 +63,15 @@ public class ExtentReportManager {
     }
 
     @SuppressWarnings("Duplicates")
-    public static void testStepHandle(String teststatus, WebDriver driver, ExtentTest test, Throwable throwable) {
+    public static void testStepHandle(String teststatus, WebDriver driver, ExtentTest test, String throwable) {
         switch (teststatus) {
             case "FAIL":
-                childTest.fail(MarkupHelper.createLabel(throwable.getMessage(), ExtentColor.RED));
-                System.out.println(": i want to know: " + throwable);
+               childTest.fail(throwable);
+
+               /* childTest.fail(MarkupHelper.createLabel("<details><summary><b><font color=red>Exception occured, click to see details:"
+                        +"</font><b></summary>"+throwable+"</details> \n",ExtentColor.RED));*/
+
+
                 try {
                     String base64Screenshot = "data:image/png;base64," + ((TakesScreenshot) driver).getScreenshotAs(OutputType.BASE64);
                     childTest.log(Status.FAIL, "Screenshot of failed test Case", childTest.addScreenCaptureFromBase64String(base64Screenshot).getModel().getMedia().get(0));
