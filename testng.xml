@@ -3,14 +3,30 @@
 
 
 <suite name="Test-Suite" parallel="tests" thread-count="1">
+
     <listeners>
         <listener class-name="Listeners.TestListener"/>
     </listeners>
 
     <test name="Chrome" parallel="classes" thread-count="1">
-
+        <parameter name="browser" value="chrome"/>
         <classes>
-            <class name="PageScript.LoginPage"/>
+            <class name="PageScript.LoginPage">
+            <methods>
+                <include name="testpass" />
+            </methods>
+            </class>
         </classes>
     </test>
+    <test name="firefox" parallel="classes" thread-count="1">
+        <parameter name="browser" value="firefox"/>
+        <classes>
+            <class name="PageScript.LoginPage">
+                <methods>
+                    <include name="testpass" />
+                </methods>
+            </class>
+        </classes>
+    </test>
+
 </suite>

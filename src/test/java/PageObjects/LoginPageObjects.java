@@ -5,11 +5,11 @@ import org.openqa.selenium.support.PageFactory;
 
 public class LoginPageObjects {
 
-    private WebDriver driver;
+    private ThreadLocal<WebDriver> driver;
     public LoginPageObjects(WebDriver driver) {
 
-        this.driver=driver;
-        PageFactory.initElements(driver,this);
+
+       // PageFactory.initElements(driver,this);
     }
 
 

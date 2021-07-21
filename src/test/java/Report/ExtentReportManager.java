@@ -38,7 +38,7 @@ public class ExtentReportManager {
     @BeforeClass
     @SuppressWarnings("Duplicates")
     public static ExtentReports report() {
-        String projectName = "PAW12";
+        String projectName = "PAW15";
         try {
 
             ExtentKlovReporter klovReporter = new ExtentKlovReporter(projectName);

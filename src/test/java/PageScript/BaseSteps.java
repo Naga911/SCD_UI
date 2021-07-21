@@ -1,13 +1,14 @@
 package PageScript;
 
-import Base.BaseUtill;
+import Base.ThreadLocalClass;
 import PageObjects.LoginPageObjects;
+import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 public class BaseSteps  {
 
 
-    BaseUtill baseUtil;
+    ThreadLocalClass threadLocalClass;
 
     protected LoginPageObjects loginPageObjects = null;
 
@@ -20,11 +21,7 @@ public class BaseSteps  {
     //Screen Classes Initialization
     protected void setupCucumber() {
         System.out.println("Cucumber Base Test Before-login-test-cucumber");
-        //wait = new WebDriverWait(ExpectedConditions.visibilityOf());
-
-        loginPageObjects = new LoginPageObjects(baseUtil.GetDriver());
+        loginPageObjects = new LoginPageObjects(threadLocalClass.getT1driver());
 
     }
-
-
 }

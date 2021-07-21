@@ -1,9 +1,9 @@
 package PageScript;
 
-import Base.BaseUtill;
+import Base.BrowserFactory;
+import Base.ThreadLocalClass;
 
 import Utilities.Log;
-import Utilities.Retry;
 import com.aventstack.extentreports.Status;
 import org.openqa.selenium.*;
 import org.openqa.selenium.support.ui.WebDriverWait;
@@ -19,40 +19,36 @@ import java.util.Arrays;
 
 import Report.ExtentReportManager;
 
-
 public class LoginPage extends ExtentReportManager {
 
-    private WebDriver driver = BaseUtill.GetDriver();
-    ITestResult getresult;
+    private WebDriver driver;
+    ThreadLocalClass threadLocalClass;
 
+    @Parameters("browser")
+    @BeforeMethod
+    public void LaunchApp(String browser) {
+        BrowserFactory browserFactory = new BrowserFactory();
 
-    @BeforeTest
-    public void setupLoginSteps() {
-        System.out.println("Before-login-test");
-        BaseSteps baseSteps = new BaseSteps();
-        baseSteps.setupCucumber();
+        ThreadLocalClass.getInstance().setT1driver(browserFactory.createBrowserInstance(browser));
+        driver = ThreadLocalClass.getInstance().getT1driver();
     }
 
     @Test
     public void testpass() throws IOException {
-        ExtentTest logInfo = null;
-
         try {
-            BaseUtill baseUtil = new BaseUtill();
-            driver = baseUtil.GetDriver();
+            System.out.println("hello we are working");
             driver.get("https://www.amazon.in/");
+
             driver.manage().window().maximize();
             WebDriverWait webDriverWait = new WebDriverWait(driver, Duration.ofSeconds(10));
             webDriverWait.until(WebDriver -> ((JavascriptExecutor) driver).executeScript("return document.readyState").equals("complete"));
             parentTest = extent.createTest("executing scenarios").assignCategory("Sanity").assignAuthor("Nagaraj");
-            childTest=parentTest.createNode("Verification of pass test scenario");
-
-
-            childTest.log(Status.PASS,"Test Case passed");
+            childTest = parentTest.createNode("Verification of pass test scenario");
+            childTest.log(Status.PASS, "Test Case passed");
 
         } catch (AssertionError | Exception e) {
-            String e1= Arrays.toString(e.getStackTrace());
-            testStepHandle("PASS", BaseUtill.GetDriver(), childTest, e1);
+            String e1 = Arrays.toString(e.getStackTrace());
+            testStepHandle("PASS", driver, childTest, e1);
         }
     }
 
@@ -61,14 +57,14 @@ public class LoginPage extends ExtentReportManager {
         ExtentTest logInfo = null;
         try {
 
-          //  parentTest = extent.createTest("skip test").assignCategory("Sanity").assignAuthor("Nagaraj");
-            childTest=parentTest.createNode("Verification of skip test scenario");
+            parentTest = extent.createTest("skip test").assignCategory("Sanity").assignAuthor("Nagaraj");
+            childTest = parentTest.createNode("Verification of skip test scenario");
 
             throw new SkipException("executing skip scenario");
 
         } catch (AssertionError | Exception e) {
-            String e1= Arrays.toString(e.getStackTrace());
-            testStepHandle("SKIP", BaseUtill.GetDriver(), childTest, e1);
+            String e1 = Arrays.toString(e.getStackTrace());
+            testStepHandle("SKIP", driver, childTest, e1);
         }
     }
 
@@ -78,29 +74,28 @@ public class LoginPage extends ExtentReportManager {
         try {
             parentTest = extent.createTest("scenarios for Failed Case").assignCategory("Regression").assignAuthor("Nagaraj");
 
-            childTest=parentTest.createNode("Verification of failed test scenario");
-            BaseUtill baseUtil = new BaseUtill();
-            driver = baseUtil.GetDriver();
+            childTest = parentTest.createNode("Verification of failed test scenario");
+
+
             driver.get("https://www.amazon.in/");
             driver.manage().window().maximize();
             String currentURL = driver.getCurrentUrl();
             Assert.assertEquals(currentURL, "NoTitle");
 
-        }catch (AssertionError | Exception e) {
-             String e1= Arrays.toString(e.getStackTrace());
-            testStepHandle("FAIL", BaseUtill.GetDriver(), childTest, e1);
+        } catch (AssertionError | Exception e) {
+            String e1 = Arrays.toString(e.getStackTrace());
+            testStepHandle("FAIL", driver, childTest, e1);
         }
 
     }
+
     @AfterMethod
-    public void aftermethod(ITestResult result)
-    {
-        String methodname=result.getMethod().getMethodName();
-        if(result.getStatus()==ITestResult.FAILURE)
-        {
-            String exceptionmessage= Arrays.toString(result.getThrowable().getStackTrace());
+    public void aftermethod(ITestResult result) {
+        String methodname = result.getMethod().getMethodName();
+        if (result.getStatus() == ITestResult.FAILURE) {
+            String exceptionmessage = Arrays.toString(result.getThrowable().getStackTrace());
             childTest.fail("<details><summary><b><font color=red>Exception occured, click to see details:"
-            +"</font><b></summary>"+exceptionmessage.replaceAll(",","<br")+"</details> \n");
+                    + "</font><b></summary>" + exceptionmessage.replaceAll(",", "<br") + "</details> \n");
         }
     }
 
@@ -135,7 +130,7 @@ public class LoginPage extends ExtentReportManager {
     // @AfterClass
     public void tearDown() {
         Log.info("Tests are ending");
-        driver.quit();
+        threadLocalClass.closedriver();
     }
 
 

@@ -28,6 +28,7 @@ public class TestListener extends ExtentReportManager implements ITestListener {
     public static void setExtent(ExtentReports extent) {
         TestListener.extent = extent;
     }
+
     @Override
     public void onStart(ITestContext iTestContext) {
         Log.info("I am in onStart method " + iTestContext.getName());
